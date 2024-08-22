@@ -17,7 +17,7 @@ const getUserAccount = async () => {
     const res2 = await userFolloweds(res.account.id)
     fans.value = res2.followeds
     const res3 = await userLevel()
-    level.value = res3.data.level
+    level.value = res3.data?.level
     const res4 = await userLikeList(res.account.id)
     likelist.value = res4.ids
 }

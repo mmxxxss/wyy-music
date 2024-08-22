@@ -34,21 +34,14 @@ const handleNext = () => {
 }
 const val = ref('')
 const getMusic = () => {
-  Taro.navigateTo({
+  Taro.redirectTo({
     url: `/pages/search/index?keywords=${val.value}`
   })
 }
 const musicStore = useMusicStore()
-const isShow = ref(false)
 const getMusicId = (musicid) => {
-  isShow.value = true
   musicStore.addIds(musicid)
 }
-watch(() => musicStore.ids, (newIds) => {
-  if (newIds.length === 0) {
-    isShow.value = false
-  }
-})
 </script>
 
 <template>
@@ -142,7 +135,7 @@ watch(() => musicStore.ids, (newIds) => {
       </div>
     </div>
   </div>
-  <div v-show="isShow">
+  <div v-show="musicStore.isShow">
     <audioplayer></audioplayer>
   </div>
 </template>

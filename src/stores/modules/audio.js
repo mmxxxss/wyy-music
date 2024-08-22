@@ -10,6 +10,8 @@ export const useAudioStore = defineStore(
     const innerAudioContext = Taro.createInnerAudioContext({
       useWebAudioImplement: false,
     });
+    const plstart = ref(true);
+    const plstop = ref(false);
     innerAudioContext.autoplay = true;
     const changeAudio = () => {
       isAudio.value = true;
@@ -23,22 +25,53 @@ export const useAudioStore = defineStore(
     const stopAudio = () => {
       innerAudioContext.stop();
     };
-    const onEnded = () => {
-      innerAudioContext.onEnded(() => {
-        musicStore.addCurrentPlay();
-        if (musicStore.currentPlay >= musicStore.ids.length) {
-          musicStore.currentPlay = 0;
-        }
-      });
+    const destoryAudio = () => {
+      innerAudioContext.destroy();
     };
+    innerAudioContext.onPause(() => {
+      plstart.value = true;
+      plstop.value = false;
+    });
+    innerAudioContext.onStop(() => {
+      plstart.value = true;
+      plstop.value = false;
+    });
+    innerAudioContext.onEnded(() => {
+      musicStore.addCurrentPlay();
+      console.log(musicStore.currentPlay, "111");
+      if (musicStore.currentPlay >= musicStore.ids.length) {
+        musicStore.resetCurrentPlay();
+        console.log(musicStore.currentPlay, "222");
+        if (musicStore.ids.length === 1) {
+          playAudio();
+        }
+      }
+    });
+    innerAudioContext.onPlay(() => {
+      plstart.value = false;
+      plstop.value = true;
+    });
+    const playStart = () => {
+      plstart.value = false;
+      plstop.value = true;
+    };
+    const playStop = () => {
+      plstart.value = true;
+      plstop.value = false;
+    };
+
     return {
       isAudio,
       innerAudioContext,
+      plstart,
+      plstop,
       changeAudio,
       pauseAudio,
       playAudio,
       stopAudio,
-      onEnded,
+      playStart,
+      playStop,
+      destoryAudio,
     };
   },
   {

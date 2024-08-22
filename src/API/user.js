@@ -1,6 +1,6 @@
 import Taro from "@tarojs/taro";
 
-const servie = (path, params, method = "GET") => {
+export const servie = (path, params, method = "GET") => {
   const cookie = Taro.getStorageSync("cookie");
   return new Promise((resolve, reject) => {
     Taro.request({

@@ -1,7 +1,7 @@
 <script setup>
 import Taro from '@tarojs/taro';
 import { musicSearch } from '../../API/music';
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { Service } from '@nutui/icons-vue-taro'
 import { useMusicStore } from '../../stores/modules/music';
 import audioplayer from '../../components/Audioplayer/audioplayer.vue'
@@ -41,9 +41,10 @@ const getMusicId = (musicid) => {
             <Service size="25px" color="rgb(175, 173, 173)" class="icon" @click="getMusicId(music.id)"></Service>
         </div>
     </div>
-    <audioplayer></audioplayer>
+    <div v-show="musicStore.isShow">
+        <audioplayer></audioplayer>
+    </div>
 </template>
-
 <style>
 .searchlist {
     width: 100%;

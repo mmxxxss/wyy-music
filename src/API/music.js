@@ -1,19 +1,5 @@
-import Taro from "@tarojs/taro";
-const servie = (path, params, method = "GET") => {
-  return new Promise((resolve, reject) => {
-    Taro.request({
-      url: "http://116.62.219.52:3000" + path,
-      data: params,
-      method,
-      success(res) {
-        resolve(res.data);
-      },
-      fail(err) {
-        reject(err);
-      },
-    });
-  });
-};
+import { servie } from "./user";
+
 export const musicSearch = (keywords) => {
   return servie("/search", { keywords });
 };

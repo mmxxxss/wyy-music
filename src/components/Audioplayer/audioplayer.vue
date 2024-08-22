@@ -1,9 +1,7 @@
 <script setup>
 import { useMusicStore } from '../../stores/modules/music';
 import { useAudioStore } from '../../stores/modules/audio';
-import { musicSrc, musicDetail } from '../../API/music';
-import Taro from '@tarojs/taro';
-import { ref, watch, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { IconFont } from '@nutui/icons-vue-taro'
 const notifyState = {
     state: reactive({
@@ -12,56 +10,18 @@ const notifyState = {
         type: 'success'
     }),
 }
-const url = ref('')
-const name = ref('')
-const actor = ref([])
-const plstart = ref(true)
-const plstop = ref(false)
 const musicStore = useMusicStore();
-const playList = ref([])
-const songsList = ref([])
 const audioStore = useAudioStore()
-// watch(() => Src.value, (newSrc) => {
-//     audioStore.innerAudioContext.stop()
-//     audioStore.innerAudioContext.src = newSrc
-//     plstart.value = false;
-//     plstop.value = true;
-//     notifyState.state.show = true;
-// })
-watch(() => musicStore.currentPlay, (newId) => {
-    setTimeout(() => {
-        audioStore.innerAudioContext.src = playList.value[newId]?.url
-        plstart.value = false
-        plstop.value = true
-        url.value = songsList.value[musicStore.currentPlay].al?.picUrl;
-        name.value = songsList.value[musicStore.currentPlay].name;
-        actor.value = songsList.value[musicStore.currentPlay].ar
-    }, 1000);
-})
-watch(() => musicStore.ids, async (newIds) => {
-    const idList = newIds.join(',')
-    const res = await musicSrc(idList)
-    playList.value = res.data
-    const { songs } = await musicDetail(idList);
-    songsList.value = songs
-}, {
-    deep: true,
-})
 const emit = defineEmits(['success'])
-audioStore.onEnded()
 const musicStart = () => {
-    plstart.value = false;
-    plstop.value = true;
     audioStore.playAudio()
 }
 const musicStop = () => {
-    plstart.value = true;
-    plstop.value = false;
     audioStore.pauseAudio()
 }
 const show = ref(false)
 const changeShow = () => {
-    show.value = !show.value
+    show.value = true
 }
 const getMusicId = (indexid) => {
     musicStore.currentPlay = indexid
@@ -70,24 +30,29 @@ const getMusicId = (indexid) => {
 const delMusicId = (delid) => {
     musicStore.delIds(delid)
 }
+watch(() => musicStore.currentPlay, (newPlay) => {
+    if (newPlay === undefined)
+        show.value = false
+})
 </script>
 <template>
     <nut-notify :type="notifyState.state.type" v-model:visible="notifyState.state.show" :msg="notifyState.state.desc" />
     <div class="audio">
         <div class="au-left">
-            <nut-avatar class="music-img"> <img :src="url" /> </nut-avatar>
-            <span class="music-name">{{ name }}</span>
+            <nut-avatar class="music-img"> <img :src="musicStore.url" /> </nut-avatar>
+            <span class="music-name">{{ musicStore.name }}</span>
             <span class="symbol">-</span>
-            <span v-for="(item, index) in actor" class="ad-actor">{{ item.name }}
-                <span v-if="index !== actor.length - 1">/</span>
+            <span v-for="(item, index) in musicStore.actor" class="ad-actor">{{ item.name }}
+                <span v-if="index !== musicStore.actor.length - 1">/</span>
             </span>
         </div>
-        <IconFont name="play-start" size="27px" class="au-right" @click="musicStart" v-if="plstart"></IconFont>
-        <IconFont name="play-stop" size="27px" class="au-right" @click="musicStop" v-if="plstop"></IconFont>
+        <IconFont name="play-start" size="27px" class="au-right" @click="musicStart" v-if="audioStore.plstart">
+        </IconFont>
+        <IconFont name="play-stop" size="27px" class="au-right" @click="musicStop" v-if="audioStore.plstop"></IconFont>
         <IconFont name="horizontal" size="20px" @click="changeShow" class="au-list"></IconFont>
         <nut-popup v-model:visible="show" position="bottom" closeable :style="{ height: '70%' }">
             <span style="font-size: 25px; margin-top: 10px; margin-left: 10px;">播放列表</span>
-            <div v-for="(item1, index1) in songsList" class="au-songlist">
+            <div v-for="(item1, index1) in musicStore.songsList" class="au-songlist">
                 <div class="au-sl-left">
                     <view class="au-sl-music">{{ item1.name }}</view>
                     <div class="au-sl-arlist">
