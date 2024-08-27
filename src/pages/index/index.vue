@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { Search2, Left, Right, Photograph, Message, Service, PlayStart, Success } from '@nutui/icons-vue-taro';
 import Taro from '@tarojs/taro';
 import { musicBanner, musicRecommendPlayList, musicRecommendMusic } from '../../API/music';
@@ -34,7 +34,7 @@ const handleNext = () => {
 }
 const val = ref('')
 const getMusic = () => {
-  Taro.redirectTo({
+  Taro.navigateTo({
     url: `/pages/search/index?keywords=${val.value}`
   })
 }

@@ -7,6 +7,7 @@ export default defineAppConfig({
     "pages/mine/index",
     "pages/search/index",
     "pages/like/index",
+    "pages/lyric/index",
   ],
   tabBar: {
     color: "#000000",

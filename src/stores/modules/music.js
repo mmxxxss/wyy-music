@@ -20,6 +20,13 @@ export const useMusicStore = defineStore(
         if (newPlay === undefined) {
           return;
         }
+        if (newPlay >= ids.value.length) {
+          currentPlay.value = 0;
+          if (ids.value.length === 1) {
+            audioStore.playAudio();
+          }
+          return;
+        }
         audioStore.innerAudioContext.src = playList.value[newPlay];
         url.value = songsList.value[newPlay].al?.picUrl;
         name.value = songsList.value[newPlay].name;
@@ -52,8 +59,6 @@ export const useMusicStore = defineStore(
           currentPlay.value++;
         } else {
           isShow.value = true;
-          console.log(isShow.value);
-
           const res1 = await musicSrc(newId);
           playList.value.push(res1.data[0].url);
           const res2 = await musicDetail(newId);
@@ -66,20 +71,23 @@ export const useMusicStore = defineStore(
     const addCurrentPlay = () => {
       currentPlay.value++;
     };
-    const resetCurrentPlay = () => {
-      currentPlay.value = 0;
+    const subCurrentPlay = () => {
+      currentPlay.value--;
     };
-
     const delIds = (index) => {
       if (index < currentPlay.value) {
         currentPlay.value--;
+      }
+      if (index === currentPlay.value) {
+        audioStore.innerAudioContext.src =
+          playList.value[currentPlay.value + 1];
       }
       if (
         (index === ids.value.length - 1) &
         (currentPlay.value === ids.value.length - 1) &
         (ids.value.length !== 1)
       ) {
-        resetCurrentPlay();
+        currentPlay.value = 0;
       }
       ids.value.splice(index, 1);
       playList.value.splice(index, 1);
@@ -105,7 +113,7 @@ export const useMusicStore = defineStore(
       addIds,
       delIds,
       addCurrentPlay,
-      resetCurrentPlay,
+      subCurrentPlay,
     };
   },
   {

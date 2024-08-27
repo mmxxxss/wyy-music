@@ -18,3 +18,6 @@ export const musicRecommendPlayList = () => {
 export const musicRecommendMusic = () => {
   return servie("/recommend/songs");
 };
+export const musicLyric = (id) => {
+  return servie("/lyric", { id });
+};

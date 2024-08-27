@@ -3,6 +3,7 @@ import { useMusicStore } from '../../stores/modules/music';
 import { useAudioStore } from '../../stores/modules/audio';
 import { ref, reactive, watch } from 'vue';
 import { IconFont } from '@nutui/icons-vue-taro'
+import Taro from '@tarojs/taro';
 const notifyState = {
     state: reactive({
         show: false,
@@ -34,11 +35,16 @@ watch(() => musicStore.currentPlay, (newPlay) => {
     if (newPlay === undefined)
         show.value = false
 })
+const getLyric = () => {
+    Taro.navigateTo({
+        url: '/pages/lyric/index'
+    })
+}
 </script>
 <template>
     <nut-notify :type="notifyState.state.type" v-model:visible="notifyState.state.show" :msg="notifyState.state.desc" />
     <div class="audio">
-        <div class="au-left">
+        <div class="au-left" @click="getLyric">
             <nut-avatar class="music-img"> <img :src="musicStore.url" /> </nut-avatar>
             <span class="music-name">{{ musicStore.name }}</span>
             <span class="symbol">-</span>

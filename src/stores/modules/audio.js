@@ -12,6 +12,7 @@ export const useAudioStore = defineStore(
     });
     const plstart = ref(true);
     const plstop = ref(false);
+    const currentTime = ref("");
     innerAudioContext.autoplay = true;
     const changeAudio = () => {
       isAudio.value = true;
@@ -36,16 +37,11 @@ export const useAudioStore = defineStore(
       plstart.value = true;
       plstop.value = false;
     });
+    innerAudioContext.onTimeUpdate(() => {
+      currentTime.value = innerAudioContext.currentTime;
+    });
     innerAudioContext.onEnded(() => {
       musicStore.addCurrentPlay();
-      console.log(musicStore.currentPlay, "111");
-      if (musicStore.currentPlay >= musicStore.ids.length) {
-        musicStore.resetCurrentPlay();
-        console.log(musicStore.currentPlay, "222");
-        if (musicStore.ids.length === 1) {
-          playAudio();
-        }
-      }
     });
     innerAudioContext.onPlay(() => {
       plstart.value = false;
@@ -65,6 +61,7 @@ export const useAudioStore = defineStore(
       innerAudioContext,
       plstart,
       plstop,
+      currentTime,
       changeAudio,
       pauseAudio,
       playAudio,
