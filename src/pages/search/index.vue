@@ -32,7 +32,7 @@ const getMusicId = (musicid) => {
         <div class="left">
             <view class="music">{{ music.name }}</view>
             <div class="actorlist">
-                <view v-for="(item, index) in music.artists" class="actor">{{ item.name }}
+                <view v-for="(item, index) in music.artists" style="display: flex;">{{ item.name }}
                     <span v-if="index !== music.artists.length - 1">/</span>
                 </view>
             </div>
@@ -71,6 +71,12 @@ const getMusicId = (musicid) => {
 
 .actorlist {
     display: flex;
+    color: rgb(175, 173, 173);
+    font-size: 26px;
+    width: 500px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .music {
@@ -78,11 +84,5 @@ const getMusicId = (musicid) => {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.actor {
-    display: flex;
-    color: rgb(175, 173, 173);
-    font-size: 26px;
 }
 </style>

@@ -51,7 +51,7 @@ watch(() => audioStore.currentTime, (newTime) => {
             <div style="display: flex;">
                 <span v-for="(item, index) in musicStore.songsList[musicStore.currentPlay].ar" class="lc-actor">{{
                     item.name }}
-                    <span v-if="index !== item.ar?.length - 1">/</span>
+                    <span v-if="index !== musicStore.songsList[musicStore.currentPlay].ar.length - 1">/</span>
                 </span>
             </div>
         </div>
@@ -78,7 +78,8 @@ watch(() => audioStore.currentTime, (newTime) => {
     width: 100%;
     display: flex;
     align-items: center;
-    background-color: rgb(191, 213, 223);
+    background: linear-gradient(to bottom, rgb(223, 191, 211), rgb(191, 213, 223));
+    // background-color: rgb(191, 213, 223);
     flex-direction: column;
     height: 100vh;
 

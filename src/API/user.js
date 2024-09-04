@@ -4,7 +4,7 @@ export const servie = (path, params, method = "GET") => {
   const cookie = Taro.getStorageSync("cookie");
   return new Promise((resolve, reject) => {
     Taro.request({
-      url: "http://116.62.219.52:3000" + path,
+      url: "http://localhost:3000" + path,
       data: { cookie, ...params },
       method,
       success(res) {

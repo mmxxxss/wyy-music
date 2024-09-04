@@ -3,12 +3,15 @@ import { ref } from 'vue';
 import { userAccount, userFolloweds, userFollows, userLevel, userLikeList } from '../../API/user';
 import { Clock, Download, Top, Shop3, HeartFill } from '@nutui/icons-vue-taro';
 import Taro from '@tarojs/taro';
+import audioplayer from '../../components/Audioplayer/audioplayer.vue';
+import { useMusicStore } from '../../stores/modules/music';
 const account = ref({})
 const concern = ref([])
 const fans = ref([])
 const level = ref('')
 const value = ref('1')
 const likelist = ref([])
+const musicStore = useMusicStore()
 const getUserAccount = async () => {
     const res = await userAccount()
     account.value = res
@@ -78,6 +81,9 @@ const goToLike = () => {
             </nut-tabs>
         </div>
     </div>
+    <div v-show="musicStore.isShow">
+        <audioplayer></audioplayer>
+    </div>
 </template>
 <style>
 .mn-center-like {
@@ -120,6 +126,7 @@ const goToLike = () => {
     height: 380px;
     flex-direction: column;
     align-items: center;
-    background-color: rgb(130, 98, 98);
+    background: linear-gradient(to bottom, white, rgb(190, 153, 153));
+    /* background-color: rgb(190, 153, 153); */
 }
 </style>
